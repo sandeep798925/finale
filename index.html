@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motorcycle Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9fafb; margin: 0; padding: 24px; }
+    h1 { font-size: 28px; font-weight: bold; margin-bottom: 24px; }
+    .controls { display: flex; gap: 16px; margin-bottom: 24px; }
+    input, select { padding: 8px; border: 1px solid #ccc; border-radius: 8px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .card { background: #fff; padding: 16px; border-radius: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .card h2 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+    .card p { margin: 4px 0; }
+    .card button { margin-top: 12px; width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 8px; background: #fff; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Motorcycle Dashboard</h1>
+  <div class="controls">
+    <input id="search" type="text" placeholder="Search motorcycles..." />
+    <select id="filter">
+      <option value="All">All Types</option>
+      <option value="Naked">Naked</option>
+      <option value="Sport">Sport</option>
+      <option value="Dual Sport">Dual Sport</option>
+      <option value="Adventure">Adventure</option>
+    </select>
+  </div>
+  <div id="grid" class="grid"></div>
+
+  <script>
+    const motorcycles = [
+      { name: "Yamaha MT-07", type: "Naked", price: "$7,899" },
+      { name: "Kawasaki Ninja 400", type: "Sport", price: "$5,699" },
+      { name: "Honda CRF300L", type: "Dual Sport", price: "$5,399" },
+      { name: "Ducati Monster", type: "Naked", price: "$12,995" },
+      { name: "BMW R1250GS", type: "Adventure", price: "$17,995" },
+      { name: "Suzuki Hayabusa", type: "Sport", price: "$18,799" }
+    ];
+
+    const searchInput = document.getElementById('search');
+    const filterSelect = document.getElementById('filter');
+    const grid = document.getElementById('grid');
+
+    function render() {
+      const search = searchInput.value.toLowerCase();
+      const filter = filterSelect.value;
+      grid.innerHTML = '';
+
+      motorcycles.filter(bike => {
+        const matchesSearch = bike.name.toLowerCase().includes(search);
+        const matchesType = filter === 'All' || bike.type === filter;
+        return matchesSearch && matchesType;
+      }).forEach(bike => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h2>${bike.name}</h2>
+          <p>Type: ${bike.type}</p>
+          <p><strong>${bike.price}</strong></p>
+          <button>View Details</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener('input', render);
+    filterSelect.addEventListener('change', render);
+    render();
+  </script>
+</body>
+</html>
